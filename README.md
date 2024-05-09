@@ -23,11 +23,40 @@ Execute the C Program for the desired output.
 ## Write a C program that illustrates two processes communicating using shared memory.
 
 
+```
+#include <stdio.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+
+int main()
+{
+	// Generate a unique key using ftok
+	key_t key = ftok("shmfile", 65);
+
+	// Get an identifier for the shared memory segment using shmget
+	int shmid = shmget(key, 1024, 0666 | IPC_CREAT);
+      printf("Shared memory id = %d \n",shmid);
+// Attach to the shared memory segment using shmat
+	char* str = (char*)shmat(shmid, (void*)0, 0);
+	
+    printf("Write Data : ");
+	fgets(str, 1024, stdin);
+
+	printf("Data written in memory: %s\n", str);
+
+	// Detach from the shared memory segment using shmdt
+	shmdt(str);
+
+	return 0;
+}
+
+```
 
 
 
 ## OUTPUT
 
+![image](https://github.com/Mythili7339267708/Linux-IPC-Shared-memory/assets/144260246/45244d56-ea9a-4790-8c9d-88eb730f58ea)
 
 # RESULT:
 The program is executed successfully.
